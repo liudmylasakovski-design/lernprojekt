@@ -5,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
 
-def test_warenkorb():
+def test_produkte():
 
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
@@ -28,6 +28,7 @@ def test_warenkorb():
     driver.find_element(By.ID, "password").send_keys("secret_sauce")
     driver.find_element(By.ID, "login-button").click()
     time.sleep(5)
+    driver.save_screenshot("debug.png")
 
     try:
         driver.switch_to.alert.accept()
@@ -35,16 +36,9 @@ def test_warenkorb():
         pass
 
     time.sleep(1)
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-fleece-jacket").click()
+    driver.find_element(By.XPATH, '//*[@data-test="product-sort-container"]').click()
     time.sleep(1)
-    driver.find_element(By.ID, "item_5_title_link").click().click()
-
-    try:
-        assert "cart" in driver.current_url
-    except AssertionError:
-        driver.save_screenshot("fehler_warenkorb.png")
-        raise
-    finally:
-        
-        driver.save_screenshot("warenkorb.png")
-        driver.quit()
+    driver.find_element(By.XPATH, '//*[text()="Name (Z to A)"]').click()
+    assert "inventory" in driver.current_url
+    
+    driver.quit()
