@@ -5,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
 
-def test_sortierung():
+def test_produkte():
 
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
