@@ -39,6 +39,12 @@ def test_sortierung():
     driver.find_element(By.XPATH, '//*[@data-test="product-sort-container"]').click()
     time.sleep(1)
     driver.find_element(By.XPATH, '//*[text()="Name (Z to A)"]').click()
-    assert "inventory" in driver.current_url
+    erstes_produkt = driver.find_element(By.CLASS_NAME, "inventory_item_name").text
+    print("Erstes Produkt:", erstes_produkt)
+
+
+    assert erstes_produkt == "Test.allTheThings() T-Shirt (Red)"
+    driver.save_screenshot("sortierung.png")
+
     
     driver.quit()
