@@ -1,4 +1,3 @@
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -6,7 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
 
-def test_checkout():
+def test_add_and_checkout():
 
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
@@ -28,7 +27,7 @@ def test_checkout():
     driver.find_element(By.ID, "user-name").send_keys("standard_user")
     driver.find_element(By.ID, "password").send_keys("secret_sauce")
     driver.find_element(By.ID, "login-button").click()
-    time.sleep(5)
+    time.sleep(2)
 
     try:
         driver.switch_to.alert.accept()
@@ -36,14 +35,15 @@ def test_checkout():
         pass
 
     time.sleep(1)
-    driver.find_element(By.ID, "react-burger-menu-btn").click()
+    driver.find_element(By.ID, "item_5_title_link").click()
     time.sleep(1)
-    driver.find_element(By.ID, "logout_sidebar_link").click()
-    try:
-         assert "https://www.saucedemo.com/" in driver.current_url 
-    except AssertionError:
-        driver.save_screenshot("fehler_logout.png")
-        raise
-    finally:
-        driver.save_screenshot("logout.png")
-        driver.quit()
+    assert "inventory-item" in driver.current_url
+    driver.find_element(By.ID, "add-to-cart").click()
+    time.sleep(1)
+    driver.find_element(By.ID, "shopping_cart_container").click()
+    time.sleep(1)
+    driver.find_element(By.ID, "checkout").click()
+    time.sleep(1)
+    assert "checkout" in driver.current_url
+    
+    driver.quit()

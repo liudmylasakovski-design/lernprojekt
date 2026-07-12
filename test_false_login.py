@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
 
-def test_checkout():
+def test_false_login():
 
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
@@ -26,24 +26,17 @@ def test_checkout():
 
     driver.get("https://www.saucedemo.com")
     driver.find_element(By.ID, "user-name").send_keys("standard_user")
-    driver.find_element(By.ID, "password").send_keys("secret_sauce")
+    driver.find_element(By.ID, "password").send_keys("secret_123")
     driver.find_element(By.ID, "login-button").click()
-    time.sleep(5)
+    time.sleep(3)
+    error = driver.find_element(By.XPATH, '//*[@data-test="error"]')
+    
 
     try:
-        driver.switch_to.alert.accept()
-    except:
-        pass
-
-    time.sleep(1)
-    driver.find_element(By.ID, "react-burger-menu-btn").click()
-    time.sleep(1)
-    driver.find_element(By.ID, "logout_sidebar_link").click()
-    try:
-         assert "https://www.saucedemo.com/" in driver.current_url 
+         assert error.text == "Epic sadface: Username and password do not match any user in this service"
     except AssertionError:
-        driver.save_screenshot("fehler_logout.png")
+        driver.save_screenshot("fehler_false_login.png")
         raise
     finally:
-        driver.save_screenshot("logout.png")
+        driver.save_screenshot("false_login.png")
         driver.quit()
