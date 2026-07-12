@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
 
-def test_preis():
+def test_gesamtpreis():
 
     chrome_options = Options()
     chrome_options.add_argument("--incognito")
@@ -40,14 +40,20 @@ def test_preis():
     driver.find_element(By.ID, "add-to-cart-sauce-labs-onesie").click()
     time.sleep(1)
     driver.find_element(By.XPATH, '//*[@data-test="shopping-cart-badge"]').click()
-    
     time.sleep(1)
-    preise = driver.find_elements(By.XPATH, '//*[@data-test="inventory-item-price"]')
-    
+    driver.find_element(By.ID, "checkout").click()
+    time.sleep(1)
+    driver.find_element(By.ID, "first-name").send_keys("Liudmyla")
+    driver.find_element(By.ID, "last-name").send_keys("Sakovski")
+    driver.find_element(By.ID, "postal-code").send_keys("42653")
+    driver.find_element(By.ID, "continue").click()
 
+    total = driver.find_element(By.XPATH, '//*[@data-test="total-label"]')
+    
+    
     try:
-         assert preise[0].text == "$49.99" 
-         assert preise[1].text == "$7.99"
+         assert total.text == "Total: $62.62" 
+         
     except AssertionError:
         driver.save_screenshot("fehler_warenkorb.png")
         raise
